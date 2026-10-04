@@ -1,6 +1,6 @@
 # Deployment
 
-- Vercel 배포 URL: (배포 후 URL 입력)
+- Vercel 배포 URL: https://vercel05-self.vercel.app/
 
 # Key Learning
 
