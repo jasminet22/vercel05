@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>document</title>
+
+        <script> 
+            function hello() {
+                alert("hello world");
+            }
+
+            window.addEventListener("load", function () {
+                const cmbtn2 = document.querySelector("#cmbtn2");
+                cmbtn2.addEventListener("click", function () {
+                    alert("hello world");
+                });
+            });
+
+            window.addEventListener("load", function () {
+                const addfruit = document.querySelector("#addfruit");
+                const fruit = document.querySelector("#fruit");
+                const fruitlist = document.querySelector("#fruitlist");
+
+                addfruit.addEventListener("click", function () {
+                    const data = fruit.value.split(",");
+                    for(i=0; i<data.length; i++){
+                        const one = document.createElement("li");
+                        one.textContent = data[i] + " ";
+
+                        const rmbtn = document.createElement("button");
+                        
+                    }
+                })
+            })
+
+        </script>
+
+        <style>
+            #container {
+                width:200px;
+                height:50px;
+                background-color:rgb(45, 200, 65)
+            }
+        </style>
+    </head>
+
+    <body>
+        <input type="text" id="fruit" placeholder="과일을 입력하세요">
+        <button id="addfruit">과일추가</button>
+        <ul id="fruitlist">
+
+        </ul>
+
+        <button onclick="alert('hello world')">clickme1</button>
+
+        <button onclick="hello()">clickme2</button>
+
+        <button id="cmbtn1">clickme3</button>
+
+        <button id="cmbtn2">clickme4</button>
+        
+        <button id="removebtn">삭제</button>
+
+        <script>
+            const removebtn = document.querySelector("#removebtn");
+            removebtn.addEventListener("click", function () {
+                const item = document.querySelector("#item2");
+                item.remove();
+            })
+        </script>
+
+        <h3>동적요소 추가</h3>
+        <button id="addbtn">동적요소 추가</button>
+        <div id="container"></div>
+        
+
+        <h3>click, mouseover 이벤트</h3>
+        <button id="clickbtn1">눌러보세요(alert)</button>
+        <button id="clickbtn2">눌러보세요(innerText)</button>
+        <button id="clickbtn3">눌러보세요(innerHTML)</button>
+        <div id="div2">여기에 데이터가 바뀝니다</div>
+
+
+        <!--계산기-->
+        <h3>덧셈계산기</h3>
+        <input type="text" id="num1" size="5">
+        <input type="text" id="num2" size="5">
+        <button onclick="add()">+</button>
+        <input type="text" id="result" size="5" readonly><br><br>
+        
+
+        <!-- inner html/innertext/textcontent -->
+        <div id="div1" onclick="changeText()">Hello</div>
+    </body>
+
+    <script>
+        function changeText() {
+            document.getElementById("div1").innerHTML = "Hello world";
+        }
+
+        function add() {
+            const num1 = document.querySelector("#num1").value;
+            const num2 = document.querySelector("#num2").value;
+            const result = Number(num1) + Number(num2);
+            document.querySelector("#result").value = result;
+        }
+
+        const clickbtn1 = document.querySelector("#clickbtn1");
+        clickbtn1.addEventListener("click", function () {
+            alert("clickbtn1 클릭");
+        }); 
+
+        const clickbtn2 = document.querySelector("#clickbtn2");
+        clickbtn2.addEventListener("click", function () {
+            document.querySelector("#div2").innerText = "<h1>clickbtn2 클릭</h1>";
+        }); 
+
+        const clickbtn3 = document.querySelector("#clickbtn3");
+        clickbtn3.addEventListener("click", function () {
+            document.querySelector("#div2").innerHTML = "<h1>clickbtn3 클릭</h1>";
+        }); 
+
+        const div2 = document.querySelector("#div2");
+        div2.addEventListener("mouseover", function () {
+            div2.innerText = "마우스가 올라갔습니다.";
+        })
+
+        const addbtn = document.querySelector("#addbtn");
+        addbtn.addEventListener("click", function () {
+            const p = document.createElement("p");
+            p.textContent = "새 문단입니다.";
+            container.appendChild(p);  
+        })
+
+        const cmbtn1 = document.querySelector("#cmbtn1");
+        cmbtn1.addEventListener("click", function () {
+            alert("hello world");
+        })
+    </script>
+</html>
