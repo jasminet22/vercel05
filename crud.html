@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>도서 관리 crud</title>
+        <style>
+            body {
+                max-width: 800px;
+                margin: 30px auto;
+                padding: 0 20px;
+                font-family: Arial, sans-serif;
+            }
+
+            form {
+                padding: 20px;
+                background-color: #f1f1f1;
+                border: 1px solid #cccccc;
+            }
+
+            .input-row {
+                margin-bottom: 12px;
+            }
+
+            .input-row input,
+            .input-row select {
+                display: block;
+                box-sizing: border-box;
+                width: 100%;
+                max-width: 400px;
+                margin-top: 5px;
+                padding: 8px;
+            }
+
+            button {
+                margin: 5px 5px 5px 0;
+                padding: 7px 12px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #dddddd;
+            }
+
+            #book-list > div {
+                margin-bottom: 10px;
+                padding: 12px;
+                border: 1px solid #cccccc;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>도서 관리</h1>
+
+        <h2>도서 입력</h2>
+        <form id="book-form">
+            <div class="input-row">
+                제목
+                <input id="title" name="title" type="text" required>
+            </div>
+
+            <div class="input-row">
+                저자
+                <input id="author" name="author" type="text" required>
+            </div>
+
+            <div class="input-row">
+                카테고리
+                <select id="category" name="category" required>
+                    <option value="">카테고리를 선택하세요.</option>
+                    <option value="Web">Web</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Database">Database</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="input-row">
+                가격
+                <input id="price" name="price" type="number" required>
+            </div>
+
+            <div class="input-row">
+                출판 연도
+                <input id="year" name="year" type="number" required>
+            </div>
+
+            <button id="addbtn" type="button">Add</button>
+        </form>
+
+        <h2>도서 목록</h2>
+        <div id="book-list"></div>
+
+        <script>
+            window.onload = function() {
+                let books = [
+                    {
+                        id: 1,
+                        title: "HTML",
+                        author: "Kim",
+                        category: "Web",
+                        price: 10000,
+                        year: 2022
+                    },
+                    {
+                        id: 2,
+                        title: "CSS",
+                        author: "Lee",
+                        category: "Web",
+                        price: 12000,
+                        year: 2023
+                    },
+                    {
+                        id: 3,
+                        title: "JavaScript",
+                        author: "Park",
+                        category: "Programming",
+                        price: 15000,
+                        year: 2024
+                    }
+                ];
+
+                let nextId = 4;
+                let editingId = 0;
+
+                const bookList = document.querySelector("#book-list");
+                const bookForm = document.querySelector("#book-form");
+                const title = document.querySelector("#title");
+                const author = document.querySelector("#author");
+                const category = document.querySelector("#category");
+                const price = document.querySelector("#price");
+                const year = document.querySelector("#year");
+                const addbtn = document.querySelector("#addbtn");
+
+                function render() {
+                    bookList.innerHTML = "";
+
+                    for (let i = 0; i < books.length; i++) {
+                        const book = books[i];
+                        const item = document.createElement("div");
+                        item.innerText =
+                            "ID: " + book.id + " " +
+                            "제목: " + book.title + " " +
+                            "저자: " + book.author + " " +
+                            "카테고리: " + book.category + " " +
+                            "가격: " + book.price + " " +
+                            "출판 연도: " + book.year;
+
+                        const editbtn = document.createElement("button");
+                        editbtn.type = "button";
+                        editbtn.innerText = "수정";
+                        editbtn.addEventListener("click", function() {
+                            title.value = book.title;
+                            author.value = book.author;
+                            category.value = book.category;
+                            price.value = book.price;
+                            year.value = book.year;
+                            editingId = book.id;
+                            addbtn.innerText = "저장";
+                        });
+
+                        const delbtn = document.createElement("button");
+                        delbtn.type = "button";
+                        delbtn.innerText = "삭제";
+                        delbtn.addEventListener("click", function() {
+                            if (confirm("삭제하시겠습니까?")) {
+                                const deleteIndex = books.indexOf(book);
+                                books.splice(deleteIndex, 1);
+
+                                if (editingId === book.id) {
+                                    title.value = "";
+                                    author.value = "";
+                                    category.value = "";
+                                    price.value = "";
+                                    year.value = "";
+                                    editingId = 0;
+                                    addbtn.innerText = "Add";
+                                }
+
+                                render();
+                            }
+                        });
+
+                        item.appendChild(editbtn);
+                        item.appendChild(delbtn);
+                        bookList.appendChild(item);
+                    }
+                }
+
+                addbtn.addEventListener("click", function() {
+                    if (!bookForm.checkValidity()) {
+                        alert("모든 항목을 입력하세요.");
+                        return;
+                    }
+
+                    if (title.value.length > 100) {
+                        alert("제목은 100자 이내로 입력하세요.");
+                        return;
+                    }
+
+                    if (author.value.length > 50) {
+                        alert("저자는 50자 이내로 입력하세요.");
+                        return;
+                    }
+
+                    if (editingId === 0) {
+                        const book = {
+                            id: nextId,
+                            title: title.value,
+                            author: author.value,
+                            category: category.value,
+                            price: Number(price.value),
+                            year: Number(year.value)
+                        };
+
+                        books.push(book);
+                        nextId = nextId + 1;
+                    } else {
+                        const book = books.find(function(item) {
+                            return item.id === editingId;
+                        });
+
+                        if (book !== undefined) {
+                            book.title = title.value;
+                            book.author = author.value;
+                            book.category = category.value;
+                            book.price = Number(price.value);
+                            book.year = Number(year.value);
+                        }
+
+                        editingId = 0;
+                        addbtn.innerText = "Add";
+                    }
+
+                    title.value = "";
+                    author.value = "";
+                    category.value = "";
+                    price.value = "";
+                    year.value = "";
+
+                    render();
+                });
+
+                render();
+            };
+        </script>
+    </body>
+</html>
